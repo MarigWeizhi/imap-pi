@@ -1,0 +1,1 @@
+/usr/sbin/i2cset -f -y 1 0x60 0x00 0

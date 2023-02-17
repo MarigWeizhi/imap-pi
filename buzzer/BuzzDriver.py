@@ -2,7 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 import threading
-from util import *
+from utils import *
 
 class BuzzDriver(threading.Thread):
     # 以 xxx = BuzzDriver() 创建对象

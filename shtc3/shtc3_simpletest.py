@@ -7,8 +7,10 @@ import busio
 import board
 import adafruit_shtc3
 
+
+
 # 解除温湿度传感器被占用
-os.system("i2cset -f -y 1 0x60 0x00 0")
+os.system("/usr/sbin/i2cset -f -y 1 0x60 0x00 0")
 
 # i2c = busio.I2C(board.SCL, board.SDA)
 i2c = board.I2C()

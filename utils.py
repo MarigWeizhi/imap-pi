@@ -2,6 +2,8 @@ import socket
 import threading
 import time
 
+def timestamp():
+    return int(time.time()*1000)
 
 def getLocalIp():
     '''Get the local ip'''
@@ -15,7 +17,7 @@ def getLocalIp():
 
 
 def log_print(*args):
-    file_path = time.strftime("/home/pi/iwms-server/log/%y%m%d_iwms_log.txt")
+    file_path = time.strftime("/home/pi/imap-pi/log/%y%m%d_imap_log.txt")
     f = open(file_path, mode='a+')
     print(time.strftime("[%y/%m/%d %X] "), *args)
     print(time.strftime("[%y/%m/%d %X] "), *args, file=f)

@@ -9,7 +9,7 @@ import adafruit_shtc3
 import threading
 import socket
 from buzzer.BuzzDriver import *
-from util import *
+from utils import *
 import requests
 
 

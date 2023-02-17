@@ -6,7 +6,6 @@ import time
 # 定义一个存放led引脚号的列表
 buzzer_pin = 12
 
-
 def buzzer_init():
     global buzzer_pin
     # 设置引脚模式为BCM引脚号模式

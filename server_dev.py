@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from util import *
+from utils import *
 from Servo.new_servo_driver import *
 from shtc3.shtc3_driver import *
 from face_recognition_mod.recognitionWithTrack_820 import *
