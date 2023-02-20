@@ -4,7 +4,8 @@ from utils import *
 
 
 class kafka_producer():
-    def __init__(self, ips=['47.116.66.37:9092',], topic='test'):
+
+    def __init__(self, ips=['47.116.66.37:9092', ], topic='test'):
         self.ips = ips
         self.topic = topic
 
@@ -18,11 +19,11 @@ class kafka_producer():
         )
 
     def send_data(self, data):
-        log_print("发送数据")
-        log_print(data)
+        log_print("send_data", data)
         future = self.producer.send(topic=self.topic, value=data)
         result = future.get(timeout=10)
-        log_print(result)
+        log_print("result", result)
+
 
 producer = KafkaProducer(
     bootstrap_servers=['47.116.66.37:9092'],

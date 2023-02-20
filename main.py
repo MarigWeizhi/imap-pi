@@ -2,6 +2,9 @@ import os
 from shtc3.shtc3_driver_new import shtc3_driver_new
 from utils import *
 from kafka_demo import kafka_producer
+from gy30.gy30_driver import gy30_driver
+from camera import *
+import threading
 from kafka import KafkaProducer
 import json
 
@@ -11,10 +14,17 @@ DEVICE_ID = 1
 
 KAFKA_PORT = 9092
 
+
 # 温湿度模块初始化
 def init_shtc3():
     global shtc
     shtc = shtc3_driver_new()
+
+
+# 光亮度模块初始化
+def init_gy30():
+    global gy30
+    gy30 = gy30_driver()
 
 
 # kafka模块初始化
@@ -23,9 +33,20 @@ def init_kafka():
     test_producer = kafka_producer(['47.116.66.37:9092'], 'test')
 
 
+# target=app.run,kwargs={'host':'0.0.0.0', 'debug'=True, 'threaded'=True}
+def init_camara():
+    camara_args = {
+        'host': '0.0.0.0',
+        'debug': True,
+        'threaded': True}
+    thread = threading.Thread(target=app.run, kwargs=camara_args)
+    thread.start()
+
 # 封装上报数据
 def get_report_data():
     tmp, hmt = shtc.get_tmp_hmt()
+    brightness = gy30.get_brightness()
+
     report_data = {
         "siteId": DEVICE_ID,
         "timestamp": timestamp(),
@@ -34,7 +55,7 @@ def get_report_data():
         "data": {
             "tmp": tmp,
             "hmt": hmt / 100,
-            "lx": 124.5
+            "lx": brightness
         }
     }
     return report_data
@@ -50,8 +71,14 @@ if __name__ == '__main__':
         log_print("温湿度传感器初始化")
         init_shtc3()
 
+        log_print("光亮度传感器初始化")
+        init_gy30()
+
         log_print("Kafka初始化")
         init_kafka()
+
+        # log_print("摄像头初始化")
+        # init_camara()
 
         log_print("开始运行")
         while True:
