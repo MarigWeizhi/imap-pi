@@ -1,9 +1,17 @@
+import datetime
 import socket
 import threading
 import time
 
+
+def time_to_seconds(date_string):
+    date_object = datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")
+    return int(date_object.timestamp()*1000) - 8 * 60 * 60 * 1000
+
+
 def timestamp():
-    return int(time.time()*1000)
+    return int(time.time() * 1000)
+
 
 def getLocalIp():
     '''Get the local ip'''
@@ -40,5 +48,6 @@ class send_driver():
 if __name__ == '__main__':
     # send = send_driver('192.168.2.3', 5052)
     # send.send_data('temp@dev1#T:28.5,H:58.6')
-    log_print("打印测试")
-    log_print("2020-1-1", "打印测试2")
+    # log_print("打印测试")
+    # log_print("2020-1-1", "打印测试2")
+    print(time_to_seconds('2022-09-01 00:00:00'))

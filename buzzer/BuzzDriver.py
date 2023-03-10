@@ -2,7 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 import threading
-from utils import *
+# from utils import *
 
 class BuzzDriver(threading.Thread):
     # 以 xxx = BuzzDriver() 创建对象
@@ -19,18 +19,29 @@ class BuzzDriver(threading.Thread):
         self.setup()
 
     def setup(self):
-            GPIO.setmode(GPIO.BCM) # 物理编码端口
-            GPIO.setup(self.Buzzer, GPIO.OUT)
-            global Buzz
-            Buzz = GPIO.PWM(self.Buzzer, 440)
+        GPIO.setmode(GPIO.BCM) # 物理编码端口
+        GPIO.setup(self.Buzzer, GPIO.OUT)
+        global Buzz
+        Buzz = GPIO.PWM(self.Buzzer, 440)
+        Buzz.ChangeFrequency(self.CL[2])  # 改音调在这里
+        # Buzz.ChangeFrequency(self.CM[5])  # 改音调在这里
+        # Buzz.ChangeFrequency(self.CH[5])  # 改音调在这里
+
+    def open(self,count):
+        for i in range(count):
+            Buzz.start(50)
+            time.sleep(0.25)
+            Buzz.stop()
+            time.sleep(0.25)
+
+
     def loop(self):
         Buzz.ChangeFrequency(self.CH[7]) # 改音调在这里
-        log_print ('\n   buzzer init...')
+        # log_print ('\n   buzzer init...')
         while True:
             time.sleep(1)
             if self.flag:
                 while True:
-                    # log_print("start buzzing")
                     if not self.flag:
                         break
                     Buzz.start(50)
@@ -42,13 +53,17 @@ class BuzzDriver(threading.Thread):
         Buzz.stop()
         GPIO.output(self.Buzzer, 1)
         GPIO.cleanup()
+
     def run(self):
-        self.loop()                          
+        self.loop()
+
 if __name__ == '__main__':
     buzz = BuzzDriver(22)
-    buzz.start()
-    while True:
-        if input() == '1':
-            buzz.flag = True
-        else:
-            buzz.flag = False
+    buzz.open(5)
+
+    # buzz.start()
+    # while True:
+    #     if input() == '1':
+    #         buzz.flag = True
+    #     else:
+    #         buzz.flag = False

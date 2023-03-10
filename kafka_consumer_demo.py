@@ -1,16 +1,25 @@
+import json
 import time
-from kafka import KafkaConsumer
+from kafka import KafkaConsumer, KafkaProducer
 
-consumer = KafkaConsumer(
-    'my_topic',
-    group_id='test_id',
-    bootstrap_servers=['localhost:9092'],
-    auto_offset_reset='earliest'
-)
-for msg in consumer:
-    print(msg)
-    print(f"topic = {msg.topic}")  # topic default is string
-    print(f"partition = {msg.partition}")
-    print(f"value = {msg.value.decode()}")  # bytes to string
-    print(f"timestamp = {msg.timestamp}")
-    print("time = ", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(msg.timestamp / 1000)))
+class PyConsumer(KafkaConsumer):
+    def __init__(self, topic, callback=None, ips=['47.116.66.37:9092']):
+        super().__init__(topic,
+                         bootstrap_servers=ips,
+                         auto_offset_reset='earliest')
+        self.callback = callback if callback else self.print_data
+
+    def print_data(self, message):
+        print("time = ", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(message.timestamp / 1000)))
+        print("msg = ", str(message.value, encoding='utf-8'))
+
+    def monitor_data(self):
+        for message in super().__iter__():
+            self.callback(message.value)
+
+
+if __name__ == '__main__':
+    consumer = PyConsumer(topic='config')
+    # 调用监控数据的方法
+    consumer.monitor_data()
+    print("影响后续进行")
