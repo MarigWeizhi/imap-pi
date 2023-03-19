@@ -21,12 +21,13 @@ def gen(camera):
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
 # 将视频流路由至ip:port/device/1
 @app.route('/device/1')
 def video_feed():
-    return Response(gen(VideoCamera()),
+    global cam
+    return Response(gen(cam),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
+    cam = VideoCamera()
     app.run(host='0.0.0.0',debug=True,threaded=True)
