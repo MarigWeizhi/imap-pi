@@ -6,7 +6,7 @@ import random
 import pytz as pytz
 
 from config import month_ranges, hour_ranges_tmp, hour_ranges_hmt, hour_ranges_lx
-from kafka_producer_demo import PyProducer
+from kafka_producer import PyProducer
 from utils import time_to_seconds
 
 DEVICE_IDS = [1, 2, 3, 4, 5]

@@ -2,11 +2,11 @@ import collections
 import os
 
 from buzzer.BuzzDriver import BuzzDriver
-from kafka_consumer_demo import PyConsumer
+from kafka_consumer import PyConsumer
 from monitor_config import MonitorConfig
 from shtc3.shtc3_driver_new import shtc3_driver_new
 from utils import *
-from kafka_producer_demo import PyProducer
+from kafka_producer import PyProducer
 from gy30.gy30_driver import gy30_driver
 from camera import *
 import threading

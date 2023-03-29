@@ -18,14 +18,18 @@ class PyProducer():
             api_version=(0, 10)
         )
 
+    # 自带转json
     def send_data2(self,data):
         self.producer.send(topic=self.topic, value=data)
 
+    # 自带转json
     def send_data(self, data):
         log_print("send_data", data)
         future = self.producer.send(topic=self.topic, value=data)
         result = future.get(timeout=10)
         log_print("result", result)
+
+
 
 if __name__ == '__main__':
 
