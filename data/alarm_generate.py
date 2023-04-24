@@ -1,4 +1,4 @@
-from kafka_producer import PyProducer
+from data.kafka_producer import PyProducer
 
 BASE_DATA = {
     "dataReport": {

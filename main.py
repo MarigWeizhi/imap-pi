@@ -1,12 +1,10 @@
-import collections
 import os
 
 from buzzer.BuzzDriver import BuzzDriver
-from kafka_consumer import PyConsumer
+from data.kafka_consumer import PyConsumer
 from monitor_config import MonitorConfig
 from shtc3.shtc3_driver_new import shtc3_driver_new
-from utils import *
-from kafka_producer import PyProducer
+from data.kafka_producer import PyProducer
 from gy30.gy30_driver import gy30_driver
 from camera import *
 import threading
@@ -36,6 +34,7 @@ def init_gy30():
 def init_kafka():
     def update_config(msg):
         tmp_config = MonitorConfig.from_string(msg)
+        # 如果解析异常就不要这条消息
         if tmp_config and tmp_config.siteId == DEVICE_ID:
             global_var['config'] = tmp_config
 
@@ -119,7 +118,7 @@ def check_data(monitor_config: MonitorConfig, report_data):
         log_print('亮度异常', lx_data, '参考值:', lx_min, '~', lx_max)
         flag = True
 
-    if flag :  buzz.open(2)
+    if flag:  buzz.open(2)
     log_print('当前监控配置：', monitor_config.to_json())
     # log_print('当前最大温度：', monitor_config.monitor_items['tmp'].max)
     # log_print('当前监控配置版本：', monitor_config.version)
@@ -152,7 +151,7 @@ if __name__ == '__main__':
         init_kafka()
 
         # log_print("摄像头初始化")
-        # 摄像头要求在主线程，有点麻烦，干脆在外部启动
+        # 摄像头要求在主线程，有点麻烦，干脆在外部开两个进程
         # init_camara()
 
         log_print("开始运行")
@@ -162,6 +161,8 @@ if __name__ == '__main__':
                 cur_config: MonitorConfig = global_var['config']
                 # 关闭监控
                 if not cur_config or cur_config.isDelete or cur_config.interval <= 0:
+                    log_print("监控配置：", (cur_config.to_json() if cur_config.to_json else None) )
+                    log_print("关闭监控，设备休眠")
                     time.sleep(10)
                     continue
                 report_data = get_report_data()
