@@ -9,7 +9,8 @@ from gy30.gy30_driver import gy30_driver
 from camera import *
 import threading
 
-REMOTE_IP = '47.116.66.37'
+# REMOTE_IP = '47.116.66.37:9092'
+REMOTE_IP = '47.113.150.217:9092'
 LOCAL_IP = '127.0.0.1'
 DEVICE_ID = 1
 
@@ -40,9 +41,9 @@ def init_kafka():
 
     global producer
     # 生产数据
-    producer = PyProducer(topic='report')
+    producer = PyProducer(ips=[REMOTE_IP,],topic='report')
     # 订阅监控配置
-    consumer = PyConsumer(topic='config', callback=update_config)
+    consumer = PyConsumer(topic='config', callback=update_config,ips=[REMOTE_IP,])
     listener_thread = threading.Thread(target=consumer.monitor_data)
     # 启动子线程
     listener_thread.start()
@@ -82,7 +83,7 @@ def check_data(monitor_config: MonitorConfig, report_data):
     if not monitor_config: return
     if monitor_config.isDelete: return
     if monitor_config.interval <= 0: return
-
+    if isinstance(cur_config,int):return
     def is_normal(cur, min, max):
         return min <= cur <= max
 
@@ -161,9 +162,9 @@ if __name__ == '__main__':
                 cur_config: MonitorConfig = global_var['config']
                 # 关闭监控
                 if not cur_config or cur_config.isDelete or cur_config.interval <= 0:
-                    log_print("监控配置：", (cur_config.to_json() if cur_config.to_json else None) )
+                    log_print("监控配置：", (None if isinstance(cur_config,int) else cur_config.to_json()))
                     log_print("关闭监控，设备休眠")
-                    time.sleep(10)
+                    time.sleep(3)
                     continue
                 report_data = get_report_data()
                 check_data(cur_config, report_data)

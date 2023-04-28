@@ -3,7 +3,8 @@ import time
 from kafka import KafkaConsumer, KafkaProducer
 
 class PyConsumer(KafkaConsumer):
-    def __init__(self, topic, callback=None, ips=['47.116.66.37:9092']):
+    def __init__(self, topic, callback=None, ips=['47.113.150.217:9092']):
+    # def __init__(self, topic, callback=None, ips=['47.116.66.37:9092']):
         super().__init__(topic,
                          bootstrap_servers=ips,
                          auto_offset_reset='earliest')
@@ -15,11 +16,14 @@ class PyConsumer(KafkaConsumer):
 
     def monitor_data(self):
         for message in super().__iter__():
-            self.callback(message.value)
+            if self.callback == self.print_data:
+                self.callback(message)
+            else:
+                self.callback(message.value)
 
 
 if __name__ == '__main__':
-    consumer = PyConsumer(topic='config')
+    consumer = PyConsumer(topic='test')
     # 调用监控数据的方法
     consumer.monitor_data()
     print("影响后续进行")

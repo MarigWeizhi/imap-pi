@@ -48,7 +48,7 @@ def send_photo_demo():
     video = cv2.VideoCapture(0)
     success, image = video.read()
     _, frame = cv2.imencode('.jpg', image)
-    send_post_request('img', frame_to_base64(frame), 'http://192.168.2.2:8080/report/photo/1')
+    send_post_request('img', frame_to_base64(frame), 'http://192.168.2.20:8080/report/photo/1')
 
 class send_driver():
     def __init__(self, ip, port):

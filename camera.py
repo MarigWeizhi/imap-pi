@@ -4,6 +4,9 @@ import time
 from flask import Flask,Response
 from utils import *
 
+report_photo_url = 'http://192.168.2.20:8080/report/photo/1'
+# report_photo_url = 'http://192.168.43.38:8080/report/photo/1'
+
 app = Flask(__name__)
 
 class VideoCamera(object):
@@ -49,7 +52,7 @@ def video_feed():
 def send_photos(image):
     # camera = VideoCamera.instance()
     # image = camera.get_frame()
-    resp = send_post_request('img', frame_to_base64(image), 'http://192.168.2.2:8080/report/photo/1')
+    resp = send_post_request('img', frame_to_base64(image), report_photo_url)
     print(resp)
 
 # t1 = threading.Thread(target=send_photos)

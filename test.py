@@ -1,3 +1,3 @@
 from utils import *
 
-print(int(time.time()*1000))
+print(type(1))

@@ -10,8 +10,9 @@ from config import hour_ranges_tmp, hour_ranges_hmt, hour_ranges_lx
 from data.kafka_producer import PyProducer
 from utils import time_to_seconds
 
-DEVICE_IDS = [1, 2, 3, 4, 5]
-DATA_REPORT_URL = 'http://192.168.2.2:8080/report/cur/'
+DEVICE_IDS = [5]
+# DATA_REPORT_URL = 'http://192.168.2.20:8080/report/cur/'
+DATA_REPORT_URL = 'http:///192.168.43.38:8080/report/cur/'
 timezone = pytz.timezone("Etc/GMT-8")
 
 
@@ -62,9 +63,10 @@ def data_kafka_generate(start, end, gap, prod):
                     "lx": random_lx(device_id, cur)
                 }
             }
+            # print(report_data)
             prod.send_data2(report_data)
             cur += gap * 1000
-    send_flag_data()
+    # send_flag_data()
 
 
 # flag = 2 为开始标志  3为结束标志
@@ -102,9 +104,9 @@ def gen_all():
 
 def gen_little():
     prod = PyProducer(topic='report')
-    start_datetime = '2023-02-28 00:00:00'
-    end_datetime = '2023-03-10 00:00:00'
-    gap = 60 * 5
+    start_datetime = '2023-04-20 00:00:00'
+    end_datetime =   '2023-04-28 12:00:00'
+    gap = 60 * 20
     data_kafka_generate(time_to_seconds(start_datetime),
                         time_to_seconds(end_datetime),
                         gap,
@@ -159,6 +161,7 @@ def get_yesterday():
 def gen_yesterday():
     prod = PyProducer(topic='report')
     start_datetime, end_datetime = get_yesterday()
+    print(start_datetime,end_datetime)
     gap = 60 * 5
     data_kafka_generate(time_to_seconds(start_datetime),
                         time_to_seconds(end_datetime),
@@ -168,13 +171,14 @@ def gen_yesterday():
 
 if __name__ == '__main__':
     start_time = time.time() * 1000
-    # gen_little()
+    gen_little()
+
     # gen_yesterday()
 
     # http 负载测试
     # loding_test(10000, 1)
     # kakfa负载测试
-    loding_test(500, 2)
+    # loding_test(500, 2)
 
     # send_flag_data()
     # end_time = time.time() * 1000

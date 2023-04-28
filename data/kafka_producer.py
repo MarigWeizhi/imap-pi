@@ -5,7 +5,8 @@ from utils import *
 
 class PyProducer():
 
-    def __init__(self, ips=['47.116.66.37:9092', ], topic='test'):
+    def __init__(self, ips=['47.113.150.217:9092', ], topic='test'):
+        # def __init__(self, ips=['47.116.66.37:9092', ], topic='test'):
         self.ips = ips
         self.topic = topic
 
